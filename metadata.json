@@ -1,0 +1,7 @@
+{
+  "name": "DSIT Office Solutions",
+  "description": "A high-conversion landing page for DSIT, specializing in office multi-function printer rental, sales, and repair services, featuring a trust-building ROI calculator and an AI consultant.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
