@@ -10,13 +10,9 @@ import {
   Calculator, 
   ShieldCheck, 
   Zap,
-  X,
   Star,
-  Instagram, 
-  Facebook, 
   Youtube, 
   Globe, 
-  Palette, 
   Send, 
   Loader2 
 } from 'lucide-react';
@@ -99,12 +95,12 @@ const Hero = () => (
           </div>
           <h1 className="text-5xl md:text-7xl font-black text-white leading-[1] mb-8">
             성공을 부르는<br />
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-violet-400 via-fuchsia-400 to-violet-400 animate-gradient-x">스마트 워크스페이스</span> 
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-violet-400 via-fuchsia-400 to-violet-400 animate-gradient-x">복합기 렌탈서비스</span> 
           </h1>
           <p className="text-xl text-slate-400 mb-10 max-w-lg mx-auto lg:mx-0 leading-relaxed font-medium">
             비즈니스의 품격은 사무환경에서 시작됩니다.<br/>
-            DSIT는 진주 전역 2시간 내 응대와 99% 업타임을 통해<br/>
-            귀사의 완벽한 업무 몰입을 디자인합니다.
+            DSIT는 2시간 내 대응과 99% 업타임을 통해<br/>
+            고객의 완벽한 업무 몰입을 디자인합니다.
           </p>
           <div className="flex flex-col sm:flex-row gap-5 justify-center lg:justify-start">
             <button 
@@ -285,7 +281,7 @@ const ROICalculator = () => {
                 onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
                 className="w-full mt-12 bg-white text-slate-950 py-6 rounded-2xl font-black text-xl hover:bg-violet-500 hover:text-white transition-all flex items-center justify-center gap-4 group text-center"
               >
-                상세 제안서 받기 <ArrowRight className="group-hover:translate-x-2 transition-transform" />
+                맞춤 제안서 받기 <ArrowRight className="group-hover:translate-x-2 transition-transform" />
               </button>
             </div>
           </div>
@@ -453,7 +449,6 @@ const Testimonials = () => {
 
 const App: React.FC = () => {
   const [currentDate, setCurrentDate] = useState("");
-  const [isPanelOpen, setIsPanelOpen] = useState(false);
 
   useEffect(() => {
     const today = new Date();
@@ -490,7 +485,7 @@ const App: React.FC = () => {
                 <span className="text-violet-500">재정의하다</span>
               </h2>
               <p className="text-slate-500 text-xl font-medium leading-relaxed">
-                프리미엄은 당연한 것입니다. 우리는 그 너머의 완벽함을 추구합니다.<br/>
+                합리적인 가격 정책과 신속함 그 너머의 완벽함을 추구합니다.<br/>
                 귀사의 성공적인 비즈니스 성공을 위한 최고의 파트너십을 제공합니다.
               </p>
             </div>
@@ -614,11 +609,24 @@ const App: React.FC = () => {
               우리의 목표는 단순한 기기 대여가 아닌, 고객님의 지속 가능한 성공입니다.
             </p>
             <div className="flex justify-center md:justify-start gap-6">
-              {[Instagram, Facebook, Youtube, Globe].map((Icon, idx) => (
-                <a key={idx} href="#" className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center hover:bg-violet-600 hover:text-white transition-all border border-white/5 group">
-                  <Icon size={20} className="group-hover:scale-110 transition-transform" />
-                </a>
-              ))}
+              <a 
+                href="https://www.youtube.com/@jinjuprinter" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center hover:bg-violet-600 hover:text-white transition-all border border-white/5 group"
+                aria-label="YouTube"
+              >
+                <Youtube size={20} className="group-hover:scale-110 transition-transform" />
+              </a>
+              <a 
+                href="https://thirsty-amaranthus-86f.notion.site/DS-1ad557af30aa808e96e1c07526e7b9df?source=copy_link" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center hover:bg-violet-600 hover:text-white transition-all border border-white/5 group"
+                aria-label="Solution Site"
+              >
+                <Globe size={20} className="group-hover:scale-110 transition-transform" />
+              </a>
             </div>
           </div>
           <div>
@@ -640,41 +648,9 @@ const App: React.FC = () => {
           </div>
         </div>
         <div className="max-w-7xl mx-auto px-4 mt-32 pt-10 border-t border-white/5 text-[10px] text-center font-black uppercase tracking-[0.5em] text-slate-700">
-          © 2025 DSIT PREMIUM OFFICE SOLUTIONS. ALL RIGHTS RESERVED. 
+          © 2026 DSIT PREMIUM OFFICE SOLUTIONS. ALL RIGHTS RESERVED. 
         </div>
       </footer>
-
-      {/* Theme Customizer Panel */}
-      <div className="fixed bottom-8 right-8 z-[100]">
-        {!isPanelOpen ? (
-          <button onClick={() => setIsPanelOpen(true)} className="bg-white text-slate-950 p-4 rounded-full shadow-4xl hover:bg-violet-500 hover:text-white transition-all border border-white/10">
-            <Palette size={24} />
-          </button>
-        ) : (
-          <div className="bg-slate-900 border border-white/10 p-6 rounded-3xl shadow-4xl w-72 animate-in fade-in zoom-in duration-300">
-            <div className="flex justify-between items-center mb-6">
-              <span className="font-black text-xs uppercase tracking-widest text-white">테마 디자이너</span>
-              <button onClick={() => setIsPanelOpen(false)}><X size={18} className="text-slate-500" /></button>
-            </div>
-            <div className="space-y-6">
-              <div>
-                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-3">포인트 컬러</label>
-                <div className="flex gap-2">
-                  <div className="w-8 h-8 rounded-full cursor-pointer border-2 border-transparent hover:border-white transition-all bg-violet-500" />
-                  <div className="w-8 h-8 rounded-full cursor-pointer border-2 border-transparent hover:border-white transition-all bg-fuchsia-500" />
-                  <div className="w-8 h-8 rounded-full cursor-pointer border-2 border-transparent hover:border-white transition-all bg-emerald-500" />
-                  <div className="w-8 h-8 rounded-full cursor-pointer border-2 border-transparent hover:border-white transition-all bg-amber-500" />
-                </div>
-              </div>
-              <div>
-                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-3">라운드 강도</label>
-                <input type="range" min="0" max="4" step="1" className="w-full h-1 bg-white/10 accent-violet-500 rounded-lg appearance-none cursor-pointer" />
-              </div>
-              <p className="text-[9px] text-slate-600 font-bold leading-tight italic">디자인 변경 시 실시간으로 테마가 업데이트됩니다.</p>
-            </div>
-          </div>
-        )}
-      </div>
     </div>
   );
 };
