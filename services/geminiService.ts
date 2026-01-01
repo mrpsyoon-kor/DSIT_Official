@@ -2,9 +2,13 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { RecommendationRequest, GeminiRecommendation } from "../types";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
-
+/**
+ * DSIT 스마트 컨설팅 서비스: 사용자의 요구사항을 바탕으로 최적의 복합기 모델을 추천받습니다.
+ */
 export const getSmartConsulting = async (request: RecommendationRequest): Promise<GeminiRecommendation> => {
+  // Always use the required initialization pattern with direct process.env.API_KEY access
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+
   const prompt = `
     사무기기 전문가로서 다음 조건에 맞는 최적의 복합기를 추천해줘.
     - 월 흑백 사용량: ${request.monoVolume}매
@@ -41,9 +45,12 @@ export const getSmartConsulting = async (request: RecommendationRequest): Promis
       }
     });
 
-    return JSON.parse(response.text.trim());
+    // response.text is a property, not a method; extracting text from response
+    const text = response.text || '';
+    return JSON.parse(text.trim());
   } catch (error) {
     console.error("Gemini API Error:", error);
+    // Fallback recommendation in case of API error
     return {
       modelName: "Apeos C2561",
       brand: "후지필름",
