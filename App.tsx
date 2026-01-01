@@ -14,8 +14,12 @@ import {
   Youtube, 
   Globe, 
   Send, 
-  Loader2 
+  Loader2,
+  Sparkles,
+  Bot
 } from 'lucide-react';
+import { getSmartConsulting } from './services/geminiService';
+import { GeminiRecommendation } from './types';
 
 // --- Subcomponents ---
 
@@ -42,18 +46,25 @@ const Header = () => {
         </div>
         <nav className="hidden md:flex gap-10 font-bold text-sm text-slate-400">
           <a 
-            href="#services" 
-            onClick={(e) => scrollToSection(e, 'services')}
-            className="hover:text-violet-400 transition-colors uppercase tracking-widest cursor-pointer"
-          >
-            제공 서비스
-          </a>
-          <a 
             href="#calculator" 
             onClick={(e) => scrollToSection(e, 'calculator')}
             className="hover:text-violet-400 transition-colors uppercase tracking-widest cursor-pointer"
           >
             비용 계산기
+          </a>
+          <a 
+            href="#ai-consulting" 
+            onClick={(e) => scrollToSection(e, 'ai-consulting')}
+            className="hover:text-violet-400 transition-colors uppercase tracking-widest cursor-pointer flex items-center gap-1"
+          >
+            <Sparkles size={14} className="text-violet-500" /> AI 추천
+          </a>
+          <a 
+            href="#services" 
+            onClick={(e) => scrollToSection(e, 'services')}
+            className="hover:text-violet-400 transition-colors uppercase tracking-widest cursor-pointer"
+          >
+            제공 서비스
           </a>
           <a 
             href="#trust" 
@@ -104,10 +115,10 @@ const Hero = () => (
           </p>
           <div className="flex flex-col sm:flex-row gap-5 justify-center lg:justify-start">
             <button 
-              onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => document.getElementById('calculator')?.scrollIntoView({ behavior: 'smooth' })}
               className="bg-violet-600 text-white px-10 py-5 rounded-2xl font-black text-lg hover:bg-violet-700 transition-all flex items-center justify-center gap-2 group shadow-2xl shadow-violet-900/40"
             >
-              무료 컨설팅 신청 <ArrowRight className="group-hover:translate-x-1 transition-transform" />
+              비용 절감 시뮬레이션 <ArrowRight className="group-hover:translate-x-1 transition-transform" />
             </button>
             <a 
               href="https://thirsty-amaranthus-86f.notion.site/DS-1ad557af30aa808e96e1c07526e7b9df?source=copy_link"
@@ -183,6 +194,164 @@ const ServiceCard = ({ icon: Icon, title, desc, features }: any) => (
   </div>
 );
 
+const SmartAISection = () => {
+  const [monoVol, setMonoVol] = useState(2000);
+  const [colorVol, setColorVol] = useState(500);
+  const [needs, setNeeds] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [recommendation, setRecommendation] = useState<GeminiRecommendation | null>(null);
+
+  const handleConsult = async () => {
+    setIsLoading(true);
+    setRecommendation(null);
+    try {
+      const result = await getSmartConsulting({ monoVolume: monoVol, colorVolume: colorVol, needs });
+      setRecommendation(result);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <section id="ai-consulting" className="py-24 bg-slate-950 scroll-mt-24">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="bg-gradient-to-br from-violet-950/40 to-slate-900 border border-violet-500/20 rounded-[4rem] p-10 md:p-20 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-violet-600/10 blur-[120px] rounded-full -mr-20 -mt-20" />
+          
+          <div className="grid lg:grid-cols-2 gap-20 items-center relative z-10">
+            <div>
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-400 text-xs font-black tracking-widest uppercase mb-6">
+                <Bot size={16} /> Gemini AI Powered
+              </div>
+              <h2 className="text-4xl md:text-5xl font-black text-white mb-8 tracking-tighter leading-tight uppercase">
+                AI가 제안하는<br />
+                <span className="text-violet-500">스마트 워크 환경</span>
+              </h2>
+              <p className="text-slate-400 text-lg mb-12 font-medium">
+                복잡한 기종 선택, 더 이상 고민하지 마세요.<br/>
+                귀사의 사용 패턴을 분석해 최적의 생산성을 보장하는 기기를 AI가 직접 추천합니다.
+              </p>
+
+              <div className="space-y-10">
+                <div className="grid grid-cols-2 gap-8">
+                   <div>
+                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-4 ml-1">월 흑백 출력량</label>
+                    <input 
+                      type="number" 
+                      value={monoVol}
+                      onChange={(e) => setMonoVol(Number(e.target.value))}
+                      className="w-full bg-white/5 border border-white/10 rounded-2xl p-5 text-white font-black text-xl focus:ring-2 focus:ring-violet-500 outline-none transition-all"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-4 ml-1">월 컬러 출력량</label>
+                    <input 
+                      type="number" 
+                      value={colorVol}
+                      onChange={(e) => setColorVol(Number(e.target.value))}
+                      className="w-full bg-white/5 border border-white/10 rounded-2xl p-5 text-white font-black text-xl focus:ring-2 focus:ring-violet-500 outline-none transition-all"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-4 ml-1">추가 요구사항 (예: 팩스 필수, 스캔 속도 등)</label>
+                  <textarea 
+                    value={needs}
+                    onChange={(e) => setNeeds(e.target.value)}
+                    placeholder="예: 보안 출력이 중요합니다 / 팩스 기능이 반드시 있어야 해요"
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl p-5 text-white h-24 focus:ring-2 focus:ring-violet-500 outline-none transition-all placeholder:text-slate-700"
+                  />
+                </div>
+
+                <button 
+                  onClick={handleConsult}
+                  disabled={isLoading}
+                  className="w-full bg-violet-600 text-white py-6 rounded-3xl font-black text-xl hover:bg-violet-500 transition-all flex items-center justify-center gap-3 group shadow-2xl shadow-violet-900/40 disabled:opacity-50"
+                >
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="animate-spin" /> 분석 중...
+                    </>
+                  ) : (
+                    <>
+                      AI 분석 시작 <ArrowRight className="group-hover:translate-x-2 transition-transform" />
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+
+            <div className="min-h-[400px] flex flex-col items-center justify-center">
+              {!recommendation && !isLoading && (
+                <div className="text-center p-12 bg-white/5 rounded-3xl border border-dashed border-white/10 w-full">
+                  <div className="w-20 h-20 bg-slate-900 rounded-full flex items-center justify-center mx-auto mb-6 text-slate-700">
+                    <Sparkles size={32} />
+                  </div>
+                  <p className="text-slate-500 font-bold uppercase tracking-widest text-sm">왼쪽의 정보를 입력하고<br/>AI 컨설팅을 시작하세요</p>
+                </div>
+              )}
+
+              {isLoading && (
+                <div className="text-center space-y-6 animate-pulse">
+                  <div className="w-16 h-16 border-4 border-violet-500 border-t-transparent rounded-full animate-spin mx-auto" />
+                  <p className="text-violet-400 font-black tracking-tighter text-xl">데이터를 기반으로 최적의 모델을 찾는 중...</p>
+                </div>
+              )}
+
+              {recommendation && (
+                <div className="w-full animate-in fade-in slide-in-from-bottom-8 duration-500">
+                  <div className="bg-white/[0.03] backdrop-blur-3xl p-10 rounded-[3rem] border border-violet-500/30 shadow-3xl relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 p-8 text-violet-500/10 group-hover:text-violet-500/20 transition-colors">
+                      <Printer size={120} />
+                    </div>
+                    
+                    <div className="relative z-10">
+                      <div className="flex items-center gap-3 mb-6">
+                        <CheckCircle2 className="text-emerald-400" size={24} />
+                        <span className="text-xs font-black text-slate-500 uppercase tracking-widest">DSIT AI 추천 모델</span>
+                      </div>
+                      
+                      <h3 className="text-4xl font-black text-white mb-2 tracking-tighter uppercase">{recommendation.modelName}</h3>
+                      <p className="text-violet-400 font-bold text-lg mb-8 uppercase tracking-widest">{recommendation.brand}</p>
+                      
+                      <div className="space-y-6 pt-8 border-t border-white/5">
+                        <div>
+                          <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">추천 사유</p>
+                          <p className="text-slate-300 font-medium leading-relaxed">{recommendation.reason}</p>
+                        </div>
+                        <div>
+                          <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">도입 시 기대 효과</p>
+                          <p className="text-slate-300 font-medium leading-relaxed">{recommendation.expectedBenefit}</p>
+                        </div>
+                      </div>
+
+                      <button 
+                         onClick={() => {
+                          const msg = document.getElementsByName('message')[0] as HTMLTextAreaElement;
+                          if (msg) {
+                            msg.value = `AI 추천 모델: ${recommendation.modelName} 에 대한 구체적인 렌탈 비용과 상담을 원합니다.`;
+                            document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                          }
+                         }}
+                         className="w-full mt-10 bg-white text-slate-950 py-5 rounded-2xl font-black text-lg hover:bg-violet-500 hover:text-white transition-all shadow-xl"
+                      >
+                        이 모델로 견적 문의하기
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
 const ROICalculator = () => {
   const [monoVol, setMonoVol] = useState(2000);
   const [colorVol, setColorVol] = useState(200);
@@ -200,7 +369,7 @@ const ROICalculator = () => {
   const savings = buyCostPerYear - rentCostPerYear;
 
   return (
-    <section id="calculator" className="py-32 scroll-mt-24">
+    <section id="calculator" className="py-24 bg-slate-950 scroll-mt-24">
       <div className="max-w-7xl mx-auto px-4">
         <div className="bg-gradient-to-br from-indigo-950 to-slate-950 rounded-[4rem] p-10 md:p-20 border border-white/5 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_70%_30%,#4c1d9522_0%,transparent_50%)]" />
@@ -462,6 +631,10 @@ const App: React.FC = () => {
       
       <main>
         <Hero />
+        
+        {/* 이동됨: ROI 계산기 및 AI 상담 섹션 */}
+        <ROICalculator />
+        <SmartAISection />
 
         {/* Brand Logos */}
         <section className="py-20 border-y border-white/5 bg-slate-950/40">
@@ -569,7 +742,6 @@ const App: React.FC = () => {
           </div>
         </section>
 
-        <ROICalculator />
         <Testimonials />
 
         {/* Contact */}
@@ -632,10 +804,10 @@ const App: React.FC = () => {
           <div>
             <h5 className="text-white font-black uppercase tracking-widest text-sm mb-10">솔루션</h5>
             <ul className="space-y-5 text-sm font-bold">
+              <li><button onClick={() => document.getElementById('ai-consulting')?.scrollIntoView({ behavior: 'smooth' })} className="hover:text-violet-400 transition-colors uppercase tracking-widest flex items-center gap-1 mx-auto md:mx-0">스마트 AI 추천</button></li>
               <li><button onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })} className="hover:text-violet-400 transition-colors uppercase tracking-widest">프리미엄 임대</button></li>
               <li><button onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })} className="hover:text-violet-400 transition-colors uppercase tracking-widest">기업용 판매</button></li>
               <li><button onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })} className="hover:text-violet-400 transition-colors uppercase tracking-widest">전문 수리 서비스</button></li>
-              <li><button onClick={() => document.getElementById('calculator')?.scrollIntoView({ behavior: 'smooth' })} className="hover:text-violet-400 transition-colors uppercase tracking-widest">보상 판매</button></li>
             </ul>
           </div>
           <div>
