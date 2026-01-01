@@ -24,7 +24,7 @@ import {
 // --- Subcomponents ---
 
 const Header = () => {
-  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>, id: string) => {
     e.preventDefault();
     const element = document.getElementById(id);
     if (element) {
@@ -75,7 +75,7 @@ const Header = () => {
           </a>
         </nav>
         <button 
-          onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+          onClick={(e) => scrollToSection(e, 'contact')}
           className="bg-white text-slate-950 px-6 py-2.5 rounded-full font-black text-xs uppercase tracking-tighter hover:bg-violet-500 hover:text-white transition-all shadow-xl shadow-white/5 inline-block cursor-pointer"
         >
           상담 시작하기
@@ -660,9 +660,10 @@ const App: React.FC = () => {
               <div>
                 <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-3">포인트 컬러</label>
                 <div className="flex gap-2">
-                  {['violet', 'fuchsia', 'emerald', 'amber'].map(c => (
-                    <div key={c} className={`w-8 h-8 rounded-full cursor-pointer border-2 border-transparent hover:border-white transition-all bg-${c}-500`} />
-                  ))}
+                  <div className="w-8 h-8 rounded-full cursor-pointer border-2 border-transparent hover:border-white transition-all bg-violet-500" />
+                  <div className="w-8 h-8 rounded-full cursor-pointer border-2 border-transparent hover:border-white transition-all bg-fuchsia-500" />
+                  <div className="w-8 h-8 rounded-full cursor-pointer border-2 border-transparent hover:border-white transition-all bg-emerald-500" />
+                  <div className="w-8 h-8 rounded-full cursor-pointer border-2 border-transparent hover:border-white transition-all bg-amber-500" />
                 </div>
               </div>
               <div>
